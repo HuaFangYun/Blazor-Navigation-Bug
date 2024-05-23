@@ -1,0 +1,58 @@
+﻿@page "/Account/Login"
+@inject NavigationManager navigationManager
+@layout Layout.EmptyLayout
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.AspNetCore.Authentication
+<h3>Login</h3>
+<EditForm Model="loginViewModel" method="post" OnValidSubmit="LoginUserAsync" FormName="login">
+    <DataAnnotationsValidator />
+    <div class="form-floating mb-3">
+        <InputText @bind-Value="loginViewModel.UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+        <label for="email" class="form-label">UserName</label>
+        <ValidationMessage For="() => loginViewModel.UserName" class="text-danger" />
+    </div>
+    <button type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+    @*  <DataAnnotationsValidator />
+    <h2>Use a local account to log in.</h2>
+    <hr />
+    <ValidationSummary class="text-danger" role="alert" />
+    <div class="form-floating mb-3">
+    <InputText @bind-Value="loginViewModel.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+    <label for="email" class="form-label">Email</label>
+    <ValidationMessage For="() => loginViewModel.Email" class="text-danger" />
+    </div>
+    <div class="form-floating mb-3">
+    <InputText type="password" @bind-Value="loginViewModel.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
+    <label for="password" class="form-label">Password</label>
+    <ValidationMessage For="() => loginViewModel.Password" class="text-danger" />
+    </div>
+    <div>
+    <button type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+    </div> *@
+</EditForm>
+@code {
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+    [SupplyParameterFromForm]
+    LoginViewModel loginViewModel { get; set; } = new LoginViewModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // if (HttpMethods.IsGet(HttpContext.Request.Method))
+        // {
+        //     // Clear the existing external cookie to ensure a clean login process
+        //     await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        // }
+    }
+    void LoginUserAsync()
+    {
+        navigationManager.NavigateTo("/");
+    }
+
+    public class LoginViewModel
+    {
+        public string UserName { get; set; }
+        public string Password { get; set; }
+    }
+}
